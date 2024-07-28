@@ -1,6 +1,7 @@
 
 class DataHold():
     name = None
+    originalName = None
     isMesh = False
     boneName = None
     boneNameLink = None
@@ -9,6 +10,7 @@ class DataHold():
         self.name = name
         self.isMesh = isMesh
         self.boneName = boneName
+        self.originalName = name
 
     def toString(self):
         return 'Name: |%s| IsMesh: |%s| boneName: |%s| boneNameLink: |%s|' % (self.name, self.isMesh, self.boneName, self.boneNameLink)

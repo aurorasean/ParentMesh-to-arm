@@ -23,6 +23,11 @@ class panel_simple:
             context.scene,
             "createSkin",
         )
+        rowCheckbox = layout.row()
+        rowCheckbox.prop(
+            context.scene,
+            "movetoOrigin",
+        )
         rowVertex = layout.row()
         rowVertex.label(text="Material to Vertex colour")
         rowVertex = layout.row()

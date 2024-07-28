@@ -23,6 +23,12 @@ class Panel(bpy.types.Panel):
             default=(1.0, 1.0, 1.0, 1.0),
         )
 
+        bpy.types.Scene.movetoOrigin = BoolProperty(
+            name="Move all to origin?",
+            description="Moves all remaining meshes to the origin",
+            default=True,
+        )
+
         bpy.types.Scene.createSkin = BoolProperty(
             name="Create a skin?",
             description="Create a skin from the meshes",
