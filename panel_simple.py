@@ -18,6 +18,12 @@ class panel_simple:
         row = layout.row()
         row.operator("view3d.parent_mesh_armature", text="Create Armature from Parents")
 
+        row = layout.row()
+        row.operator("view3d.move_to_origin", text="Move to origin")
+        row = layout.row()
+        row.operator("view3d.move_to_constraint", text="Move to constraint")
+        row = layout.row()
+        row.operator("wm.collection_export_all", text="Export all")
         rowCheckbox = layout.row()
         rowCheckbox.prop(
             context.scene,

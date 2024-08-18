@@ -20,7 +20,8 @@ class SceneHelper:
     def getSelected():
         for select in bpy.context.selected_objects:
             return select
-
+    def doesObjectExist(objName: str):
+        return objName in bpy.data.objects
     def selectObject(objName: str):
         obj = bpy.data.objects[objName]
         obj.select_set(True)

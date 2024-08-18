@@ -1,4 +1,5 @@
-# ParentMeshToArmature
+
+# Parented Mesh To Armature
 
 ## Why this plugin
 
@@ -25,5 +26,3 @@ Download the zip from GitHub
 Blender -> Edit -> Preferences -> Add-ons -> Install.
 
 Select the downloaded zip file
-
-  
