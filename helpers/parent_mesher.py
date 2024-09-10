@@ -1,11 +1,9 @@
 import bpy
 import bmesh
-import json
 from ..merge_order import MergeOrder, DataHold
 from ..bone_helper import BoneHelper
 from ..scene_helper import SceneHelper
 import re
-
 
 class ParentMergeOrder:
     def __init__(self, parent, mergeOrders):
