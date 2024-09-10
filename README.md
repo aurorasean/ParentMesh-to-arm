@@ -120,3 +120,10 @@ Drag the files into unreal engine, an import landing folder
 Refer to this repo, for Unreal code that can help
 
 [Mesh Assembler](https://github.com/aurorasean/Mesh-Assembler)
+
+
+
+### Notes
+
+See the example/* blend files for the model used for videos
+
