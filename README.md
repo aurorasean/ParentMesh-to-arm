@@ -13,8 +13,6 @@ But having to apply the vertex groups for every single mesh object was a slow an
 
 Now it's just a click button for the entire scene
 
-
-
 ## How to install
 
 - Use Blender 4.2 or greater
@@ -23,7 +21,6 @@ Now it's just a click button for the entire scene
 - Select the downloaded zip file
 
 ## Advanced Features
-
 
 - [Paint Vertex colour for selected faces](#paint-vertex-colour-for-selected-faces)
 - [Parented Meshes to Armature](#parented-meshes-to-armature)

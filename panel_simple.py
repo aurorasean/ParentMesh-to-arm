@@ -1,10 +1,37 @@
+import os
+import bpy
 
+from . import addon
+
+
+def AssignVertexColour(colour):
+    mode = bpy.context.object.mode
+
+    bpy.ops.paint.vertex_paint_toggle()
+    bpy.context.object.data.use_paint_mask = True
+
+    ## this should make it support backwards compatibility with older versions of blender
+    try:
+        bpy.context.scene.tool_settings.unified_paint_settings.color = colour
+        bpy.context.scene.tool_settings.unified_paint_settings.color = colour
+    except:
+        print("Colour not found")
+        pass
+
+    try:
+        bpy.data.brushes["Draw"].color = colour
+    except:
+        pass
+
+    bpy.ops.paint.vertex_color_set()
+    bpy.ops.paint.vertex_color_set()
+    bpy.ops.paint.vertex_paint_toggle()
+    bpy.ops.object.mode_set(mode=mode)
 
 
 class panel_simple:
-    def draw(self, context):
-        layout = self.layout
-
+    def draw(parent, context):
+        layout = parent.layout
         enabled = False
         if context.object != None:
             mode = context.object.mode
@@ -24,6 +51,11 @@ class panel_simple:
         row.operator("view3d.move_to_constraint", text="Move to constraint")
         row = layout.row()
         row.operator("wm.collection_export_all", text="Export all")
+        rowCheckbox = layout.row()
+        rowCheckbox.prop(
+            context.scene,
+            "selectedObjectsOnly",
+        )
         rowCheckbox = layout.row()
         rowCheckbox.prop(
             context.scene,
@@ -55,85 +87,34 @@ class panel_simple:
         row = layout.row()
         row.enabled = enabled
         row.label(text="Assign vertex colour")
+
         row = layout.row()
         box = row.box()
         row = box.row()
         col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_01", text="", icon="COLORSET_01_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_02", text="", icon="COLORSET_02_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_03", text="", icon="COLORSET_03_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_04", text="", icon="COLORSET_04_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_05", text="", icon="COLORSET_05_VEC")
 
-        row = box.row()
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_06", text="", icon="COLORSET_06_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_07", text="", icon="COLORSET_07_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_08", text="", icon="COLORSET_08_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_09", text="", icon="COLORSET_09_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_10", text="", icon="COLORSET_10_VEC")
+        libs = addon.get_libraries()
 
-        row = box.row()
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_11", text="", icon="COLORSET_11_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_12", text="", icon="COLORSET_12_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_13", text="", icon="COLORSET_13_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_14", text="", icon="COLORSET_14_VEC")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_15", text="", icon="COLORSET_15_VEC")
+        # Add a dropdown for selecting a library
+        row_lib = layout.row()
+        row_lib.label(text="Library:")
+        row_lib.prop(context.scene, "sean_library_folder", text="")
 
-        # these are blank
-        row = box.row()
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_16", text="", icon="COLLECTION_COLOR_01")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_17", text="", icon="COLLECTION_COLOR_02")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_18", text="", icon="COLLECTION_COLOR_03")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_19", text="", icon="COLLECTION_COLOR_04")
-        col = row.column()
-        col.enabled = enabled
-        col.operator("view3d.assignvertex_20", text="", icon="COLLECTION_COLOR_05")
+        selectedLibrary = context.scene.sean_library_folder
+        colors = addon.get_colours(selectedLibrary)
+        for color in colors:
+            ccc = colors[color][color].icon_id
+            if ccc is None:
+                continue
 
-        row = layout.row()
-        row.enabled = enabled
-        row.prop(context.scene, "mytool_color")
-        col = row.column()
-        col.enabled = enabled
-        col.operator(
-            "view3d.assignvertex_custom", text="Assign", icon="COLLECTION_COLOR_01"
-        )
+            row = box.row()
+            colourValue = colors[color].colour
+            colourValueStr = f"{colourValue[0]:.2f}, {colourValue[1]:.2f}, {colourValue[2]:.2f}"
+            operator = row.operator(
+                "sean_painter.operator", icon_value=ccc, text=f"{color}"
+            )
+            if(colors[color] is not None and operator is not None):
+                operator.color = colors[color].colour
 
         row = layout.row()
         row.label(text="Helpers")

@@ -1,5 +1,8 @@
 import bpy
 
+from .. import addon
+
+
 class ColourCreateData():
     def __init__(self, x, y, z):
         self.x = x
@@ -45,221 +48,67 @@ class AssignVertex():
         bpy.ops.paint.vertex_color_set()
         bpy.ops.paint.vertex_paint_toggle()
         bpy.ops.object.mode_set(mode=mode)
+    def convert255To1(self, value):
+        return value / 255.0
+    def AssignVertexColourValue(self, colourValue):
+        mode = bpy.context.object.mode
+        bpy.ops.paint.vertex_paint_toggle()
+        bpy.context.object.data.use_paint_mask = True
 
+        base255Colour = (self.convert255To1(colourValue[0]), self.convert255To1(colourValue[1]), self.convert255To1(colourValue[2]))
+
+        try:
+            bpy.context.scene.tool_settings.unified_paint_settings.color = base255Colour
+            bpy.context.scene.tool_settings.unified_paint_settings.color = base255Colour
+        except (Exception) as e:
+            print("Colour crash %s" % e)
+        try:
+            bpy.data.brushes["Draw"].color = base255Colour
+        except:
+            pass
+
+        bpy.ops.paint.vertex_color_set()
+        bpy.ops.paint.vertex_color_set()
+        bpy.ops.paint.vertex_paint_toggle()
+        bpy.ops.object.mode_set(mode=mode)
     def AssignVertexColour(self, colour):
         mode = bpy.context.object.mode
 
         selected = self.colours[colour]
         bpy.ops.paint.vertex_paint_toggle()
         bpy.context.object.data.use_paint_mask = True
-        bpy.data.brushes["Draw"].color = selected.returnColour()
+
+        try:
+            bpy.context.scene.tool_settings.unified_paint_settings.color = selected.returnColour()
+            bpy.context.scene.tool_settings.unified_paint_settings.color = selected.returnColour()
+        except:
+            print("Colour not found")
+            pass
+
+        try:
+            bpy.data.brushes["Draw"].color = selected.returnColour()
+        except:
+            pass
+
         bpy.ops.paint.vertex_color_set()
         bpy.ops.paint.vertex_color_set()
         bpy.ops.paint.vertex_paint_toggle()
         bpy.ops.object.mode_set(mode=mode)
 
 
-class AssignVertex_01(bpy.types.Operator):
+class AssignVertex_Generic(bpy.types.Operator):
     assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_01"
-    bl_label = "Assign vertex red"
+    bl_idname = "sean_painter.operator"
+    bl_label = "Assign vertex generic"
+    color: bpy.props.FloatVectorProperty(size=3, default=(1, 0, 1))
 
     def execute(self, context):
-        self.assign.AssignVertexColour('red')
+        colourValueStr = f"{self.color[0]:.2f}, {self.color[1]:.2f}, {self.color[2]:.2f}"
+        print('color value: %s' % colourValueStr)
+        selected = self.color
+        self.assign.AssignVertexColourValue(selected)
         return {'FINISHED'}
 
-
-class AssignVertex_02(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_02"
-    bl_label = "Assign vertex orange"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('orange')
-        return {'FINISHED'}
-
-
-class AssignVertex_03(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_03"
-    bl_label = "Assign vertex green"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('green')
-        return {'FINISHED'}
-
-
-class AssignVertex_04(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_04"
-    bl_label = "Assign vertex blue"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('blue')
-        return {'FINISHED'}
-
-
-class AssignVertex_05(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_05"
-    bl_label = "Assign vertex lred"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('lred')
-        return {'FINISHED'}
-
-
-class AssignVertex_06(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_06"
-    bl_label = "Assign vertex purple"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('purple')
-        return {'FINISHED'}
-
-
-class AssignVertex_07(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_07"
-    bl_label = "Assign vertex 07"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('cyan')
-        return {'FINISHED'}
-
-
-class AssignVertex_08(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_08"
-    bl_label = "Assign vertex lblue"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('lblue')
-        return {'FINISHED'}
-
-
-class AssignVertex_09(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_09"
-    bl_label = "Assign vertex yellow"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('yellow')
-        return {'FINISHED'}
-
-
-class AssignVertex_10(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_10"
-    bl_label = "Assign vertex black"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('black')
-        return {'FINISHED'}
-
-
-# ----------------------------
-
-
-class AssignVertex_11(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_11"
-    bl_label = "Assign vertex mageneta"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('mageneta')
-        return {'FINISHED'}
-
-
-class AssignVertex_12(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_12"
-    bl_label = "Assign vertex lgreen"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('lgreen')
-        return {'FINISHED'}
-
-
-class AssignVertex_13(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_13"
-    bl_label = "Assign vertex lavender "
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('lavender')
-        return {'FINISHED'}
-
-
-class AssignVertex_14(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_14"
-    bl_label = "Assign vertex brown"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('brown')
-        return {'FINISHED'}
-
-
-class AssignVertex_15(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_15"
-    bl_label = "Assign vertex dgreen"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('dgreen')
-        return {'FINISHED'}
-
-# ----------------
-class AssignVertex_16(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_16"
-    bl_label = "Assign vertex lawngreen "
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('lawngreen')
-        return {'FINISHED'}
-
-
-class AssignVertex_17(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_17"
-    bl_label = "Assign vertex orchid"
-    
-    def execute(self, context):
-        self.assign.AssignVertexColour('orchid')
-        return {'FINISHED'}
-
-
-class AssignVertex_18(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_18"
-    bl_label = "Assign vertex slateblue "
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('slateblue')
-        return {'FINISHED'}
-
-
-class AssignVertex_19(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_19"
-    bl_label = "Assign vertex lightcoral "
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('lightcoral')
-        return {'FINISHED'}
-
-
-class AssignVertex_20(bpy.types.Operator):
-    assign = AssignVertex()
-    bl_idname = "view3d.assignvertex_20"
-    bl_label = "Assign vertex royalblue"
-
-    def execute(self, context):
-        self.assign.AssignVertexColour('royalblue')
-        return {'FINISHED'}
 
 class AssignVertex_Custom(bpy.types.Operator):
     assign = AssignVertex()
