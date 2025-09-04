@@ -67,4 +67,4 @@ class Panel(bpy.types.Panel):
 
     def draw(self, context):
         panel_simple.draw(self, context)
-        self.planelCustom.draw(self, context)
+        # self.planelCustom.draw(self, context)

@@ -32,6 +32,7 @@ def AssignVertexColour(colour):
 class panel_simple:
     def draw(parent, context):
         layout = parent.layout
+        
         enabled = False
         if context.object != None:
             mode = context.object.mode

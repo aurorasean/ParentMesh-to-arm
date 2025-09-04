@@ -31,6 +31,24 @@ class MaterialToVertexPaintSelected(bpy.types.Operator):
         (1, 0, 0),
         (0, 1, 0),
         (1, 0, 1),
+        (0, 0, .5),
+        (0, .5, .5),
+        (.5, .5, .5),
+        (.5, .5, 0),
+        (.5, 0, 0),
+        (0, .5, 0),
+        (.5, 0, .5),
+        (.5, .5, 1),
+        (.5, 1, 1),
+        (1, 1, 1),
+        (1, 1, .5),
+        (1, .5, .5),
+        (.5, 1, .5),
+        (1, .5, 1),
+        (.5, 0, 1),
+        (0, .5, 1),
+        (1, .5, 0),
+        (1, 0, .5),
     ]
 
     def createColours(self, max=100):
@@ -98,6 +116,8 @@ class MaterialToVertexPaintSelected(bpy.types.Operator):
 
         for i, p in enumerate(materialPolys):
             bpy.ops.object.mode_set(mode='EDIT')
+            print("Material:", p)
+
             mesh = bmesh.from_edit_mesh(obj.data)
             SceneHelper.setEditModeToFace(obj.name)
 
@@ -109,15 +129,29 @@ class MaterialToVertexPaintSelected(bpy.types.Operator):
                         face.select = True
 
             vertColour = self.getColour()
+            print("Colour:", vertColour)
+
+            mode = bpy.context.object.mode
             bpy.ops.paint.vertex_paint_toggle()
             bpy.context.object.data.use_paint_mask = True
-            bpy.data.brushes["Draw"].color = vertColour
+
+            try:
+                bpy.context.scene.tool_settings.unified_paint_settings.color = vertColour
+                bpy.context.scene.tool_settings.unified_paint_settings.color = vertColour
+            except (Exception) as e:
+                print("Colour crash %s" % e)
+            try:
+                bpy.data.brushes["Draw"].color = vertColour
+            except:
+                pass
             bpy.ops.paint.vertex_color_set()
             bpy.ops.paint.vertex_color_set()
             bpy.ops.paint.vertex_paint_toggle()
+            bpy.ops.object.mode_set(mode=mode)
+
         bpy.ops.object.mode_set(mode='OBJECT')
         SceneHelper.unselectAll()
 
         print('------------------------------------------------------------------------------------------------')
-        print('Finished')
+        print('Finished2')
         return {'FINISHED'}

@@ -16,9 +16,7 @@ def register():
         ]
         for child_dir in child_dirs:
             child_path = os.path.join(image_dir, child_dir)
-            print("Child directory:", child_path)
             child_dir_name = child_dir.replace(image_dir, "").strip(os.sep)
-            print("Child directory name:", child_dir_name)
             if os.path.exists(child_path):#
                 
                 preview_collections[child_dir_name] = {}
